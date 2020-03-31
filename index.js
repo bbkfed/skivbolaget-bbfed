@@ -5,6 +5,8 @@ const sassMiddleware = require('node-sass-middleware');
 const path = require('path')
 const app = express();
 
+require('dotenv').config();
+
 const dbConfig = require('./config/config');
 const port = process.env.PORT || 4000;
 

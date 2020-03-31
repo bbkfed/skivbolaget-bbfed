@@ -1,6 +1,5 @@
 const request = require('supertest');
 const mainRoute = require("../src/routes/mainRoute");
-const addToCartRoute = require("../src/routes/addToCartRoute");
 
 describe('Using express', () => {
     
