@@ -6,13 +6,38 @@ const verifyToken = require("../middlewares/verifyToken");
 const checkUser = require("../middlewares/checkUser");
 const calcTotalPrice = require("../functions/calcTotalPrice");
 
-app.post(ROUTE.checkout, verifyToken, checkUser, async (req, res) => {
+if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
-const user = await User.findById({ _id: req.validCookie.user._id });
+const stripe = require("stripe")(process.env.STRIPE_KEY);
 
-const totalPrice = await calcTotalPrice(user.cart);
+app.get(ROUTE.checkout, verifyToken, checkUser, async (req, res) => {
 
-res.render(VIEW.checkout, { user, totalPrice });
+    const user = await User.findById({ _id: req.validCookie.user._id });
+
+    const totalPrice = await calcTotalPrice(user.cart);
+
+    const success_url = req.protocol + '://' + req.get('host') + ROUTE.confirmation + "?session_id={CHECKOUT_SESSION_ID}";
+    const cancel_url = req.protocol + '://' + req.get('host') + "/";
+
+    console.log(user);
+
+    stripe.checkout.sessions.create({
+        client_reference_id: String(user._id),
+        payment_method_types: ["card"],
+        line_items: user.cart.map( (item) => {
+            return {
+                name: item.name,
+                amount: item.price * 100, // öre * 100 = 1 kronor
+                quantity: 1, 
+                currency: "sek"
+            }
+        }),
+        success_url: success_url,
+        cancel_url: cancel_url
+    }).then( (session) => {
+        console.log(session);
+        res.render(VIEW.checkout, { user, totalPrice, sessionId: session.id } );
+    })
 
 });
 

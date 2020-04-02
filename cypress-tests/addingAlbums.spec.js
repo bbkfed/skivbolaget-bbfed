@@ -1,12 +1,12 @@
 context("Admin page", () => {
 
     beforeEach(() => {
-        cy.visit("http://localhost:4000/login");
+        cy.visit("http://skivbolaget-bbkfed.herokuapp.com/login");
         cy.clearCookies();
         cy.get("#username").type("balthazar");
         cy.get("#password").type("1234");
         cy.get("#post-login-form").submit();
-        cy.url().should('eq', 'http://localhost:4000/admin');
+        cy.url().should('eq', 'http://skivbolaget-bbkfed.herokuapp.com/admin');
     })
 
     it("Add 18 albums", () => {
@@ -75,7 +75,7 @@ context("Admin page", () => {
 
     afterEach(() => {
         cy.clearCookies();
-        cy.visit('http://localhost:4000/');
+        cy.visit('http://skivbolaget-bbkfed.herokuapp.com/');
     });
 
 });
