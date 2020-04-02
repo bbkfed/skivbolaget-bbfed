@@ -17,7 +17,8 @@ const userSchema = new Schema({
     adminAlbums: [{
         itemId: { type: mongoose.Schema.Types.ObjectId, ref: 'Album' },
         name: { type: mongoose.Schema.Types.String, ref: 'Album' },
-        artist: { type: mongoose.Schema.Types.String, ref: 'Album' }
+        artist: { type: mongoose.Schema.Types.String, ref: 'Album' },
+        price: { type: mongoose.Schema.Types.Number, ref: 'Album' }
     }],
     resetToken: { type: String },
     expirationToken: Date
@@ -44,7 +45,8 @@ userSchema.methods.addAdminAlbums = function (item) {
     this.adminAlbums.push({ 
         itemId: item._id,
         name: item.name,
-        artist: item.artist
+        artist: item.artist,
+        price: item.price
     });
     return this.save();
 }

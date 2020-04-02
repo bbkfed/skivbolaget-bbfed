@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const express = require('express');
 
 const sassMiddleware = require('node-sass-middleware');
-const path = require('path')
+const path = require('path');
 const app = express();
 
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 
 const dbConfig = require('./config/config');
 const port = process.env.PORT || 4000;
